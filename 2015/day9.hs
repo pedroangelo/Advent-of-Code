@@ -79,4 +79,3 @@ main = do
   let distancePaths = map (distancePath locationList distances) paths
   putStrLn $ "Shortest Route: " ++ show (minimum distancePaths)
   putStrLn $ "Longest Route: " ++ show (maximum distancePaths)
-  
