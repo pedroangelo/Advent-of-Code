@@ -44,7 +44,7 @@ getNeighbors grid lightPos = map (getLight grid) neighbors
 evolveLight :: Mode -> Grid -> LightPos -> Light
 evolveLight mode grid lightPos
   -- second star
-  | mode == SecondStar && (lightPos == (0,0) || lightPos == (0,99) || lightPos == (99,0) || lightPos == (99,99)) = True
+  | mode == SecondStar && (lightPos == (0,0) || lightPos == (0,heightGrid-1) || lightPos == (widthGrid-1,0) || lightPos == (widthGrid-1,heightGrid-1)) = True
   -- a light which is on stays on when 2 or 3 neighbors are on
   | getLight grid lightPos && (onNeighbors == 2 || onNeighbors == 3) = True
   -- a light which is off turns on if exactly 3 neighbors are on
@@ -52,6 +52,8 @@ evolveLight mode grid lightPos
   -- otherwise turn or stay off
   | otherwise = False
   where onNeighbors = length $ filter id $ getNeighbors grid lightPos
+        heightGrid = length grid
+        widthGrid = length $ head grid
 
 -- evolve grid by one step
 evolveGrid :: Mode -> Grid -> Grid
