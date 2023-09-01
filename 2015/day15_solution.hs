@@ -53,12 +53,15 @@ filter500Calories ingredients amounts = filter (\amount -> (== 500) $ totalCalor
 
 main :: IO ()
 main = do
-  putStr "Filepath: "
+  putStrLn "Puzzle answer for day 15, event 2015!\n"
+  putStr "Insert filepath: "
   filePath <- getLine
   fileContents <- readFile filePath
   -- parse ingredients
   let ingredients = map parseIngredient $ lines fileContents
   -- generate distributions of different amounts of ingredients
   let amounts = generateAmounts 100 4
-  putStrLn $ "First star: " ++ show (calculateHighestScore ingredients amounts)
-  putStrLn $ "Second star: " ++ show (calculateHighestScore ingredients $ filter500Calories ingredients amounts)
+  let firstStar = calculateHighestScore ingredients amounts
+  putStrLn $ "First star: " ++ show firstStar
+  let secondStar = calculateHighestScore ingredients $ filter500Calories ingredients amounts
+  putStrLn $ "Second star: " ++ show secondStar

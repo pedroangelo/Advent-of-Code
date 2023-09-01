@@ -40,7 +40,8 @@ samePossession2 (targetPossession, targetQuantity) possessions
 
 main :: IO ()
 main = do
-  putStr "Filepath: "
+  putStrLn "Puzzle answer for day 16, event 2015!\n"
+  putStr "Insert filepath: "
   filePath <- getLine
   fileContents <- readFile filePath
   -- parse list of compounds per sue
@@ -48,7 +49,9 @@ main = do
   let targetSue = (0, [("children",3), ("cats", 7), ("samoyeds", 2), ("pomeranians", 3), ("akitas", 0), ("vizslas", 0), ("goldfish", 5), ("trees",3), ("cars", 2), ("perfumes",1)])
   -- filter which sues are compatible by comparing their possessions
   let compatibleSue = filter (\sue -> sameSue targetSue sue) auntsSue
-  putStrLn $ "First star: " ++ show (fst $ head compatibleSue)
+  let firstStar = fst $ head compatibleSue
+  putStrLn $ "First star: " ++ show firstStar
   -- filter which sues are compatible by comparing their possessions
   let compatibleSue2 = filter (\sue -> sameSue2 targetSue sue) auntsSue
-  putStrLn $ "Second star: " ++ show (fst $ head compatibleSue2)
+  let secondStar = fst $ head compatibleSue2
+  putStrLn $ "Second star: " ++ show secondStar

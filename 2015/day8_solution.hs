@@ -16,11 +16,12 @@ countString' (c : string) = 1 + countString' string
 
 main :: IO ()
 main = do
-  putStr "Filepath: "
+  putStrLn "Puzzle answer for day 8, event 2015!\n"
+  putStr "Insert filepath: "
   filePath <- getLine
   fileContents <- readFile filePath
   let strings = lines $ fileContents
-  let count = sum $ map (\x -> (length x) - (countString x)) strings
-  let count2 = sum $ map (\x -> (countString' x) - (length x)) strings
-  putStrLn $ "First star: " ++ (show count)
-  putStrLn $ "Second star: " ++ (show count2)
+  let firstStar = sum $ map (\x -> (length x) - (countString x)) strings
+  putStrLn $ "First star: " ++ show firstStar
+  let secondStar = sum $ map (\x -> (countString' x) - (length x)) strings
+  putStrLn $ "Second star: " ++ show secondStar

@@ -63,7 +63,8 @@ distancePath locationList distances pathPairs = foldl (\distance path -> distanc
 
 main :: IO ()
 main = do
-  putStr "Filepath: "
+  putStrLn "Puzzle answer for day 9, event 2015!\n"
+  putStr "Insert filepath: "
   filePath <- getLine
   fileContents <- readFile filePath
   let inputLines = lines fileContents
@@ -77,5 +78,7 @@ main = do
   let paths = map (\path -> zip path $ tail path) $ buildPaths locationList
   -- calculate the distance for each path
   let distancePaths = map (distancePath locationList distances) paths
-  putStrLn $ "Shortest Route: " ++ show (minimum distancePaths)
-  putStrLn $ "Longest Route: " ++ show (maximum distancePaths)
+  let firstStar = minimum distancePaths
+  putStrLn $ "First star: " ++ show firstStar
+  let secondStar = maximum distancePaths
+  putStrLn $ "Second star: " ++ show secondStar

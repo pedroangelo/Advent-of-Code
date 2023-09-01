@@ -31,12 +31,15 @@ parseReindeer line = (speed, duration, rest)
 
 main :: IO ()
 main = do
-  putStr "Filepath: "
+  putStrLn "Puzzle answer for day 14, event 2015!\n"
+  putStr "Insert filepath: "
   filePath <- getLine
   fileContents <- readFile filePath
   -- get list of reindeer
   let reindeers = map parseReindeer $ lines fileContents
   -- calculate the reindeer that travelled the most after 2503 seconds
-  putStrLn $ "First star: " ++ (show $ maximum $ map (calculateDistanceTravelled 2503) reindeers)
+  let firstStar = maximum $ map (calculateDistanceTravelled 2503) reindeers
+  putStrLn $ "First star: " ++ show firstStar
   -- calculate which reindeer accumulated more victory points by being first in each second
-  putStrLn $ "Second star: " ++ (show $ maximum $ map (length . filter id) $ transpose $ map (\time -> calculateWinnerTime time reindeers) [1..2503])
+  let secondStar = maximum $ map (length . filter id) $ transpose $ map (\time -> calculateWinnerTime time reindeers) [1..2503]
+  putStrLn $ "Second star: " ++ show secondStar

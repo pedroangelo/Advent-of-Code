@@ -64,14 +64,17 @@ evolveGrid mode grid = map (map (evolveLight mode grid)) positions
 
 main :: IO ()
 main = do
-  putStr "Filepath: "
+  putStrLn "Puzzle answer for day 18, event 2015!\n"
+  putStr "Insert filepath: "
   filePath <- getLine
   fileContents <- readFile filePath
   --let ingredients = map parseIngredient $ lines fileContents
   let grid = map parseLine $ lines fileContents
   -- calculate how many lights are on after 100 iterations
-  putStrLn $ "First star: " ++ show (calculateOnLights $ iterate (evolveGrid FirstStar) grid !! 100)
+  let firstStar = calculateOnLights $ iterate (evolveGrid FirstStar) grid !! 100
+  putStrLn $ "First star: " ++ show firstStar
   -- fix lights in the corner as on
   let grid' = (True : (init $ tail $ head grid) ++ [True]) : (init $ tail $ grid) ++ [(True : (init $ tail $ last grid) ++ [True])]
   -- recalculate, with the corner light stuck in on
-  putStrLn $ "Second star: " ++ show (calculateOnLights $ iterate (evolveGrid SecondStar) grid' !! 100)
+  let secondStar = calculateOnLights $ iterate (evolveGrid SecondStar) grid' !! 100
+  putStrLn $ "Second star: " ++ show secondStar

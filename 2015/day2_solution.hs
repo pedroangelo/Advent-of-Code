@@ -40,10 +40,13 @@ ribbonNeeded present = shortestDistance present + volumePresent present
 
 main :: IO ()
 main = do
-  putStr "Filepath: "
+  putStrLn "Puzzle answer for day 2, event 2015!\n"
+  putStr "Insert filepath: "
   filePath <- getLine
   fileContents <- readFile filePath
   let lines' = Data.List.lines fileContents
   let presents = Data.List.map (presentToList . textToPresent) lines'
-  putStrLn $ "Paper needed: " ++ (show $ sum $ Data.List.map paperNeeded presents) ++ " square feet"
-  putStrLn $ "Ribbon needed: " ++ (show $ sum $ Data.List.map ribbonNeeded presents) ++ " feet"
+  let firstStar = sum $ Data.List.map paperNeeded presents
+  putStrLn $ "First star: " ++ show firstStar
+  let secondStar = sum $ Data.List.map ribbonNeeded presents
+  putStrLn $ "Second star: " ++ show secondStar

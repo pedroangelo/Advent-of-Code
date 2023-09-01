@@ -58,7 +58,8 @@ totalHappiness people potentialHappiness neighbors = foldl (\happiness seatingAr
         
 main :: IO ()
 main = do
-  putStr "Filepath: "
+  putStrLn "Puzzle answer for day 13, event 2015!\n"
+  putStr "Insert filepath: "
   filePath <- getLine
   fileContents <- readFile filePath
   let inputLines = lines fileContents
@@ -72,7 +73,8 @@ main = do
   let neighborsCombinations = buildNeighborsCombinations people
   -- calculate the total happiness for each seating arrangement
   let totalHappinessCombinations = map (totalHappiness people potentialHappiness) neighborsCombinations
-  putStrLn $ "First Star: " ++ show (maximum totalHappinessCombinations)
+  let firstStar = maximum totalHappinessCombinations
+  putStrLn $ "First star: " ++ show firstStar
   -- build list of people with me
   let peopleMe = people ++ ["Me"]
   -- build matrix of potential happiness with me
@@ -81,4 +83,5 @@ main = do
   let neighborsCombinationsMe = buildNeighborsCombinations peopleMe
   -- calculate the total happiness for each seating arrangement with me
   let totalHappinessCombinationsMe = map (totalHappiness peopleMe potentialHappinessMe) neighborsCombinationsMe
-  putStrLn $ "Second Star: " ++ show (maximum totalHappinessCombinationsMe)
+  let secondStar = maximum totalHappinessCombinationsMe
+  putStrLn $ "Second star: " ++ show secondStar

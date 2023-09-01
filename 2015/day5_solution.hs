@@ -26,8 +26,11 @@ isNicerString string = getSubstrings string && hasLetterRepeatsTwiceBetween stri
 
 main :: IO ()
 main = do
-  putStr "Filepath: "
+  putStrLn "Puzzle answer for day 5, event 2015!\n"
+  putStr "Insert filepath: "
   filePath <- getLine
   fileContents <- readFile filePath
-  putStrLn $ "Number of nice strings: " ++ (show $ length $ filter (True==) $ map isNiceString $ lines fileContents)
-  putStrLn $ "Number of nicer strings: " ++ (show $ length $ filter (True==) $ map isNicerString $ lines fileContents)
+  let firstStar = length $ filter (True==) $ map isNiceString $ lines fileContents
+  putStrLn $ "First star: " ++ show firstStar
+  let secondStar = length $ filter (True==) $ map isNicerString $ lines fileContents
+  putStrLn $ "Second star: " ++ show secondStar

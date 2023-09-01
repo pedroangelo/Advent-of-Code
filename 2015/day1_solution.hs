@@ -18,9 +18,12 @@ upOrDown _ = 0
 
 main :: IO ()
 main = do
-  putStr "Filepath: "
+  putStrLn "Puzzle answer for day 1, event 2015!\n"
+  putStr "Insert filepath: "
   filePath <- getLine
   fileContents <- readFile filePath
   let lines' = lines fileContents
-  putStrLn $ "Floor: " ++ (show $ countParenthesis (lines'!!0))
-  putStrLn $ "Position: " ++ (show $ firstToReach (lines'!!0) (-1))
+  let firstStar = countParenthesis (lines'!!0)
+  putStrLn $ "First star: " ++ show firstStar
+  let secondStar = firstToReach (lines'!!0) (-1)
+  putStrLn $ "Second star: " ++ show secondStar
