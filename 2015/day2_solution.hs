@@ -1,5 +1,6 @@
 import Data.List
 import Data.Text
+import IOHandler
 
 type Length = Int
 type Width = Int
@@ -40,13 +41,11 @@ ribbonNeeded present = shortestDistance present + volumePresent present
 
 main :: IO ()
 main = do
-  putStrLn "Puzzle answer for day 2, event 2015!\n"
-  putStr "Insert filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
-  let lines' = Data.List.lines fileContents
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput (PuzzleInfo "2015" "2")
+  let lines' = Data.List.lines input
   let presents = Data.List.map (presentToList . textToPresent) lines'
   let firstStar = sum $ Data.List.map paperNeeded presents
-  putStrLn $ "First star: " ++ show firstStar
   let secondStar = sum $ Data.List.map ribbonNeeded presents
-  putStrLn $ "Second star: " ++ show secondStar
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar secondStar)

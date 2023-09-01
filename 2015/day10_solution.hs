@@ -1,4 +1,5 @@
 import Data.List
+import IOHandler
 
 -- build look-and-say sequences
 lookAndSay :: String -> String
@@ -8,14 +9,11 @@ lookAndSay string = concat $ map (\s -> (show $ length s) ++ [head s]) g
 
 main :: IO ()
 main = do
-  putStrLn "Puzzle answer for day 10, event 2015!\n"
-  putStr "Insert filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
-  let lines' = Data.List.lines fileContents
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput (PuzzleInfo "2015" "10")
+  let lines' = Data.List.lines input
   let iterations = iterate lookAndSay $ lines'!!0
   let firstStar = length $ iterations!!40
-  putStrLn $ "First star: " ++ show firstStar
   let secondStar = length $ iterations!!50
-  putStrLn $ "Second star: " ++ show secondStar
-  
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar secondStar)

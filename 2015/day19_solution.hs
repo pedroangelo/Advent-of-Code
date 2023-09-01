@@ -1,5 +1,6 @@
 import Data.Char (isUpper, isLower)
 import Data.List (elemIndices, nub, splitAt)
+import IOHandler
 
 type Atom = String
 type Molecule = [Atom]
@@ -181,11 +182,10 @@ reachableAtoms rules atom = let
 obtainData :: IO (Molecule, [Replacement])
 obtainData = do
     -- GATHER INPUT
-    putStr "Insert filepath: "
-    filePath <- getLine
-    fileContents <- readFile filePath
+    -- print puzzle info and get input from user
+    input <- obtainPuzzleInput (PuzzleInfo "2015" "19")
     --let fileContents = "e => H\ne => O\nH => HO\nH => OH\nO => HH\n\nHOHOHO"
-    let inputLines = lines fileContents
+    let inputLines = lines input
     let replacementsInput = init $ init inputLines
     let moleculeInput = last inputLines
 
@@ -198,17 +198,16 @@ obtainData = do
 
 main :: IO ()
 main = do
-    putStrLn "Puzzle answer for day 19, event 2015!\n"
-    -- OBTAIN DATA
-    (molecule, rules) <- obtainData
+  -- OBTAIN DATA
+  (molecule, rules) <- obtainData
 
-    -- FIRST STAR - How many distinct molecules can be created after all the different ways you can do one replacement on the molecule?
-    -- generate new molecules via substitution
-    let newMolecules = nub $ concat $ map (\r -> replaceMolecule r molecule) rules
-    let firstStar = length newMolecules
-    putStrLn $ "First star: " ++ show firstStar
+  -- FIRST STAR - How many distinct molecules can be created after all the different ways you can do one replacement on the molecule?
+  -- generate new molecules via substitution
+  let newMolecules = nub $ concat $ map (\r -> replaceMolecule r molecule) rules
+  let firstStar = length newMolecules
 
-    -- SECOND STAR - How many replacements steps to reach the molecule?
-    --let secondStar = fullReverse replacements [molecule]
-    secondStar <- getSecondStar rules [molecule] 0
-    putStrLn $ "Second star: " ++ show secondStar
+  -- SECOND STAR - How many replacements steps to reach the molecule?
+  --let secondStar = fullReverse replacements [molecule]
+  -- secondStar <- getSecondStar rules [molecule] 0
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar "work in progress")

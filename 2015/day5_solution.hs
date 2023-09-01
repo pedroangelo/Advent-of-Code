@@ -1,4 +1,5 @@
 import Data.List
+import IOHandler
 
 containsVowels :: String -> Bool
 containsVowels string = (<=) 3 $ length $ filter (True ==) $ map (\x -> elem x "aeiou") string
@@ -26,11 +27,9 @@ isNicerString string = getSubstrings string && hasLetterRepeatsTwiceBetween stri
 
 main :: IO ()
 main = do
-  putStrLn "Puzzle answer for day 5, event 2015!\n"
-  putStr "Insert filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
-  let firstStar = length $ filter (True==) $ map isNiceString $ lines fileContents
-  putStrLn $ "First star: " ++ show firstStar
-  let secondStar = length $ filter (True==) $ map isNicerString $ lines fileContents
-  putStrLn $ "Second star: " ++ show secondStar
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput (PuzzleInfo "2015" "5")
+  let firstStar = length $ filter (True==) $ map isNiceString $ lines input
+  let secondStar = length $ filter (True==) $ map isNicerString $ lines input
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar secondStar)

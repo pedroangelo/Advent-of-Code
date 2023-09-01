@@ -1,4 +1,5 @@
 import Data.List (transpose)
+import IOHandler
 
 type Speed = Int
 type Duration = Int
@@ -31,15 +32,13 @@ parseReindeer line = (speed, duration, rest)
 
 main :: IO ()
 main = do
-  putStrLn "Puzzle answer for day 14, event 2015!\n"
-  putStr "Insert filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput (PuzzleInfo "2015" "14")
   -- get list of reindeer
-  let reindeers = map parseReindeer $ lines fileContents
+  let reindeers = map parseReindeer $ lines input
   -- calculate the reindeer that travelled the most after 2503 seconds
   let firstStar = maximum $ map (calculateDistanceTravelled 2503) reindeers
-  putStrLn $ "First star: " ++ show firstStar
   -- calculate which reindeer accumulated more victory points by being first in each second
   let secondStar = maximum $ map (length . filter id) $ transpose $ map (\time -> calculateWinnerTime time reindeers) [1..2503]
-  putStrLn $ "Second star: " ++ show secondStar
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar secondStar)

@@ -1,4 +1,5 @@
 import Data.Maybe (isNothing, fromMaybe)
+import IOHandler
 
 type Possession = (String, Int)
 type Sue = (Int, [Possession])
@@ -40,18 +41,16 @@ samePossession2 (targetPossession, targetQuantity) possessions
 
 main :: IO ()
 main = do
-  putStrLn "Puzzle answer for day 16, event 2015!\n"
-  putStr "Insert filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput (PuzzleInfo "2015" "16")
   -- parse list of compounds per sue
-  let auntsSue = map parseSue $ lines fileContents
+  let auntsSue = map parseSue $ lines input
   let targetSue = (0, [("children",3), ("cats", 7), ("samoyeds", 2), ("pomeranians", 3), ("akitas", 0), ("vizslas", 0), ("goldfish", 5), ("trees",3), ("cars", 2), ("perfumes",1)])
   -- filter which sues are compatible by comparing their possessions
   let compatibleSue = filter (\sue -> sameSue targetSue sue) auntsSue
   let firstStar = fst $ head compatibleSue
-  putStrLn $ "First star: " ++ show firstStar
   -- filter which sues are compatible by comparing their possessions
   let compatibleSue2 = filter (\sue -> sameSue2 targetSue sue) auntsSue
   let secondStar = fst $ head compatibleSue2
-  putStrLn $ "Second star: " ++ show secondStar
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar secondStar)

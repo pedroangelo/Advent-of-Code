@@ -1,4 +1,5 @@
 import Data.List (transpose)
+import IOHandler
 
 type Name = String
 type Capacity = Int
@@ -53,15 +54,13 @@ filter500Calories ingredients amounts = filter (\amount -> (== 500) $ totalCalor
 
 main :: IO ()
 main = do
-  putStrLn "Puzzle answer for day 15, event 2015!\n"
-  putStr "Insert filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
-  -- parse ingredients
-  let ingredients = map parseIngredient $ lines fileContents
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput (PuzzleInfo "2015" "15")
+    -- parse ingredients
+  let ingredients = map parseIngredient $ lines input
   -- generate distributions of different amounts of ingredients
   let amounts = generateAmounts 100 4
   let firstStar = calculateHighestScore ingredients amounts
-  putStrLn $ "First star: " ++ show firstStar
   let secondStar = calculateHighestScore ingredients $ filter500Calories ingredients amounts
-  putStrLn $ "Second star: " ++ show secondStar
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar secondStar)

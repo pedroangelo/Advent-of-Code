@@ -1,3 +1,5 @@
+import IOHandler
+
 countString :: String -> Int
 countString [] = 0
 countString ('"' : string) = 0 + countString string
@@ -16,12 +18,10 @@ countString' (c : string) = 1 + countString' string
 
 main :: IO ()
 main = do
-  putStrLn "Puzzle answer for day 8, event 2015!\n"
-  putStr "Insert filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
-  let strings = lines $ fileContents
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput (PuzzleInfo "2015" "8")
+  let strings = lines $ input
   let firstStar = sum $ map (\x -> (length x) - (countString x)) strings
-  putStrLn $ "First star: " ++ show firstStar
   let secondStar = sum $ map (\x -> (countString' x) - (length x)) strings
-  putStrLn $ "Second star: " ++ show secondStar
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar secondStar)

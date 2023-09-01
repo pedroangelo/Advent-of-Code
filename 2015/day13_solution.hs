@@ -1,5 +1,6 @@
 import Data.Maybe (fromJust)
 import Data.List (elemIndex, permutations, replicate)
+import IOHandler
 
 type Person = String
 type Happiness = Int
@@ -58,11 +59,9 @@ totalHappiness people potentialHappiness neighbors = foldl (\happiness seatingAr
         
 main :: IO ()
 main = do
-  putStrLn "Puzzle answer for day 13, event 2015!\n"
-  putStr "Insert filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
-  let inputLines = lines fileContents
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput (PuzzleInfo "2015" "13")
+  let inputLines = lines input
   -- build list of different people
   let people = foldl parsePerson [] inputLines
   -- build initial matrix of potential happiness between pairs of people, populated with 0
@@ -74,7 +73,6 @@ main = do
   -- calculate the total happiness for each seating arrangement
   let totalHappinessCombinations = map (totalHappiness people potentialHappiness) neighborsCombinations
   let firstStar = maximum totalHappinessCombinations
-  putStrLn $ "First star: " ++ show firstStar
   -- build list of people with me
   let peopleMe = people ++ ["Me"]
   -- build matrix of potential happiness with me
@@ -84,4 +82,5 @@ main = do
   -- calculate the total happiness for each seating arrangement with me
   let totalHappinessCombinationsMe = map (totalHappiness peopleMe potentialHappinessMe) neighborsCombinationsMe
   let secondStar = maximum totalHappinessCombinationsMe
-  putStrLn $ "Second star: " ++ show secondStar
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar secondStar)

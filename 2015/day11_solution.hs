@@ -1,5 +1,6 @@
 import Data.List (group, nub, lines)
 import Data.Char (ord, chr)
+import IOHandler
 
 type Password = String
 
@@ -44,13 +45,11 @@ validPassword3 password = length pairs >= 2
 
 main :: IO ()
 main = do
-  putStrLn "Puzzle answer for day 11, event 2015!\n"
-  putStr "Insert filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
-  let lines' = Data.List.lines fileContents
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput (PuzzleInfo "2015" "11")
+  let lines' = Data.List.lines input
   let firstStar = nextValidPassword $ lines'!!0
-  putStrLn $ "First star: " ++ (show firstStar)
   let secondStar = nextValidPassword firstStar
-  putStrLn $ "Second star: " ++ (show secondStar)
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar secondStar)
   

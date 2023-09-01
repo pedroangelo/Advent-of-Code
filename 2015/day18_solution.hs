@@ -1,3 +1,5 @@
+import IOHandler
+
 data Mode = FirstStar | SecondStar deriving Eq
 type Light = Bool
 type Line = [Light]
@@ -64,17 +66,15 @@ evolveGrid mode grid = map (map (evolveLight mode grid)) positions
 
 main :: IO ()
 main = do
-  putStrLn "Puzzle answer for day 18, event 2015!\n"
-  putStr "Insert filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput (PuzzleInfo "2015" "18")
   --let ingredients = map parseIngredient $ lines fileContents
-  let grid = map parseLine $ lines fileContents
+  let grid = map parseLine $ lines input
   -- calculate how many lights are on after 100 iterations
   let firstStar = calculateOnLights $ iterate (evolveGrid FirstStar) grid !! 100
-  putStrLn $ "First star: " ++ show firstStar
   -- fix lights in the corner as on
   let grid' = (True : (init $ tail $ head grid) ++ [True]) : (init $ tail $ grid) ++ [(True : (init $ tail $ last grid) ++ [True])]
   -- recalculate, with the corner light stuck in on
   let secondStar = calculateOnLights $ iterate (evolveGrid SecondStar) grid' !! 100
-  putStrLn $ "Second star: " ++ show secondStar
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar secondStar)

@@ -1,5 +1,6 @@
 import Data.List
 import Data.Maybe
+import IOHandler
 
 type Location = String
 type Distance = Int
@@ -63,11 +64,9 @@ distancePath locationList distances pathPairs = foldl (\distance path -> distanc
 
 main :: IO ()
 main = do
-  putStrLn "Puzzle answer for day 9, event 2015!\n"
-  putStr "Insert filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
-  let inputLines = lines fileContents
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput (PuzzleInfo "2015" "9")
+  let inputLines = lines input
   -- build location list with the list of different locations
   let locationList = foldl parseLocations [] inputLines
   -- build initial matrix of locations between pairs of locations, populated with 0
@@ -79,6 +78,6 @@ main = do
   -- calculate the distance for each path
   let distancePaths = map (distancePath locationList distances) paths
   let firstStar = minimum distancePaths
-  putStrLn $ "First star: " ++ show firstStar
   let secondStar = maximum distancePaths
-  putStrLn $ "Second star: " ++ show secondStar
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar secondStar)
