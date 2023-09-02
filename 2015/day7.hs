@@ -1,5 +1,6 @@
-import Data.Bits
+import Data.Bits ((.&.), (.|.), shift)
 import Data.Char
+import IOHandler
 
 type Signal = Int
 type Wire = String
@@ -116,10 +117,12 @@ buildCircuit circuit signalMap = buildCircuit notReadyInstructions newSignalMap
 
 main :: IO ()
 main = do
-  putStr "Filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
-  let circuit = map parseInstruction $ lines fileContents
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput (PuzzleInfo "2015" "7")
+  let circuit = map parseInstruction $ lines input
   let signalMap = replicate (wireToIndex "zz") $ -1
   let finishedSignalMap = buildCircuit circuit signalMap
-  putStrLn $ show finishedSignalMap
+  let firstStar = finishedSignalMap !! (wireToIndex "a")
+  let secondStar = "unfinished"
+  -- print puzzle results
+  printPuzzleResults (PuzzleResult firstStar secondStar)
