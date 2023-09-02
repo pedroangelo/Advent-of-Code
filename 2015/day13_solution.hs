@@ -60,7 +60,7 @@ totalHappiness people potentialHappiness neighbors = foldl (\happiness seatingAr
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "13")
+  input <- obtainPuzzleInput "2015" "13"
   let inputLines = lines input
   -- build list of different people
   let people = foldl parsePerson [] inputLines
@@ -83,4 +83,4 @@ main = do
   let totalHappinessCombinationsMe = map (totalHappiness peopleMe potentialHappinessMe) neighborsCombinationsMe
   let secondStar = maximum totalHappinessCombinationsMe
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar

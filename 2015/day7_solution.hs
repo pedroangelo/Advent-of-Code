@@ -118,11 +118,11 @@ buildCircuit circuit signalMap = buildCircuit notReadyInstructions newSignalMap
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "7")
+  input <- obtainPuzzleInput "2015" "7"
   let circuit = map parseInstruction $ lines input
   let signalMap = replicate (wireToIndex "zz") $ -1
   let finishedSignalMap = buildCircuit circuit signalMap
   let firstStar = finishedSignalMap !! (wireToIndex "a")
   let secondStar = "unfinished"
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar

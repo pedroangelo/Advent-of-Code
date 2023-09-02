@@ -183,7 +183,7 @@ obtainData :: IO (Molecule, [Replacement])
 obtainData = do
     -- GATHER INPUT
     -- print puzzle info and get input from user
-    input <- obtainPuzzleInput (PuzzleInfo "2015" "19")
+    input <- obtainPuzzleInput "2015" "19"
     --let fileContents = "e => H\ne => O\nH => HO\nH => OH\nO => HH\n\nHOHOHO"
     let inputLines = lines input
     let replacementsInput = init $ init inputLines
@@ -210,4 +210,4 @@ main = do
   --let secondStar = fullReverse replacements [molecule]
   -- secondStar <- getSecondStar rules [molecule] 0
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar "work in progress")
+  printPuzzleResults firstStar "work in progress"

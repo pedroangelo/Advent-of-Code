@@ -55,7 +55,7 @@ filter500Calories ingredients amounts = filter (\amount -> (== 500) $ totalCalor
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "15")
+  input <- obtainPuzzleInput "2015" "15"
     -- parse ingredients
   let ingredients = map parseIngredient $ lines input
   -- generate distributions of different amounts of ingredients
@@ -63,4 +63,4 @@ main = do
   let firstStar = calculateHighestScore ingredients amounts
   let secondStar = calculateHighestScore ingredients $ filter500Calories ingredients amounts
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar

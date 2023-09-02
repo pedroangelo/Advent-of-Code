@@ -42,7 +42,7 @@ samePossession2 (targetPossession, targetQuantity) possessions
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "16")
+  input <- obtainPuzzleInput "2015" "16"
   -- parse list of compounds per sue
   let auntsSue = map parseSue $ lines input
   let targetSue = (0, [("children",3), ("cats", 7), ("samoyeds", 2), ("pomeranians", 3), ("akitas", 0), ("vizslas", 0), ("goldfish", 5), ("trees",3), ("cars", 2), ("perfumes",1)])
@@ -53,4 +53,4 @@ main = do
   let compatibleSue2 = filter (\sue -> sameSue2 targetSue sue) auntsSue
   let secondStar = fst $ head compatibleSue2
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar

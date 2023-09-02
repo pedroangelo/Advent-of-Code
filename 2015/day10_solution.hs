@@ -10,10 +10,10 @@ lookAndSay string = concat $ map (\s -> (show $ length s) ++ [head s]) g
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "10")
+  input <- obtainPuzzleInput "2015" "10"
   let lines' = Data.List.lines input
   let iterations = iterate lookAndSay $ lines'!!0
   let firstStar = length $ iterations!!40
   let secondStar = length $ iterations!!50
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar

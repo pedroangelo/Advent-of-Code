@@ -65,7 +65,7 @@ distancePath locationList distances pathPairs = foldl (\distance path -> distanc
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "9")
+  input <- obtainPuzzleInput "2015" "9"
   let inputLines = lines input
   -- build location list with the list of different locations
   let locationList = foldl parseLocations [] inputLines
@@ -80,4 +80,4 @@ main = do
   let firstStar = minimum distancePaths
   let secondStar = maximum distancePaths
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar

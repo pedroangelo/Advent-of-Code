@@ -46,10 +46,10 @@ validPassword3 password = length pairs >= 2
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "11")
+  input <- obtainPuzzleInput "2015" "11"
   let lines' = Data.List.lines input
   let firstStar = nextValidPassword $ lines'!!0
   let secondStar = nextValidPassword firstStar
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar
   

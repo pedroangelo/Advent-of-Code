@@ -33,7 +33,7 @@ parseReindeer line = (speed, duration, rest)
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "14")
+  input <- obtainPuzzleInput "2015" "14"
   -- get list of reindeer
   let reindeers = map parseReindeer $ lines input
   -- calculate the reindeer that travelled the most after 2503 seconds
@@ -41,4 +41,4 @@ main = do
   -- calculate which reindeer accumulated more victory points by being first in each second
   let secondStar = maximum $ map (length . filter id) $ transpose $ map (\time -> calculateWinnerTime time reindeers) [1..2503]
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar

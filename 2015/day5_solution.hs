@@ -28,8 +28,8 @@ isNicerString string = getSubstrings string && hasLetterRepeatsTwiceBetween stri
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "5")
+  input <- obtainPuzzleInput "2015" "5"
   let firstStar = length $ filter (True==) $ map isNiceString $ lines input
   let secondStar = length $ filter (True==) $ map isNicerString $ lines input
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar

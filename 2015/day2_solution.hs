@@ -42,10 +42,10 @@ ribbonNeeded present = shortestDistance present + volumePresent present
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "2")
+  input <- obtainPuzzleInput "2015" "2"
   let lines' = Data.List.lines input
   let presents = Data.List.map (presentToList . textToPresent) lines'
   let firstStar = sum $ Data.List.map paperNeeded presents
   let secondStar = sum $ Data.List.map ribbonNeeded presents
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar

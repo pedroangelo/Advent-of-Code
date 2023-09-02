@@ -67,7 +67,7 @@ evolveGrid mode grid = map (map (evolveLight mode grid)) positions
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "18")
+  input <- obtainPuzzleInput "2015" "18"
   --let ingredients = map parseIngredient $ lines fileContents
   let grid = map parseLine $ lines input
   -- calculate how many lights are on after 100 iterations
@@ -77,4 +77,4 @@ main = do
   -- recalculate, with the corner light stuck in on
   let secondStar = calculateOnLights $ iterate (evolveGrid SecondStar) grid' !! 100
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar

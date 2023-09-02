@@ -19,9 +19,9 @@ firstToReach str floor = 1 + (fromJust $ findIndex (== floor) $ scanl1 (+) $ map
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "1")
+  input <- obtainPuzzleInput "2015" "1"
   let lines' = lines input
   let firstStar = countParenthesis (lines'!!0)
   let secondStar = firstToReach (lines'!!0) (-1)
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar

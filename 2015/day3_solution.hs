@@ -28,7 +28,7 @@ splitMoves moves = unzip $ map (\move -> (head move, head $ tail move)) $ getChu
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
-  input <- obtainPuzzleInput (PuzzleInfo "2015" "3")
+  input <- obtainPuzzleInput "2015" "3"
   let moves = map textToMoves input
   let santaPath = buildPath moves
   let firstStar = length $ nub santaPath
@@ -38,4 +38,4 @@ main = do
   let roboSantaPath2 = buildPath roboSantaMoves
   let secondStar = length $ nub $ santaPath2 ++ roboSantaPath2
   -- print puzzle results
-  printPuzzleResults (PuzzleResult firstStar secondStar)
+  printPuzzleResults firstStar secondStar
