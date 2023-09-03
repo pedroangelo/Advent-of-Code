@@ -1,3 +1,5 @@
+module Event2015.Day11Solution (main, solve) where
+
 import Data.List (group, nub, lines)
 import Data.Char (ord, chr)
 import IOHandler
@@ -41,15 +43,20 @@ validPassword2 password = and $ map (\char -> not $ any (\x -> char == x) ['i', 
 -- third requirement: contain at least 2 different pairs of letters
 validPassword3 :: Password -> Bool
 validPassword3 password = length pairs >= 2
-  where pairs = nub $ filter (\x -> length x >= 2) $ group password
+  where pairs = nub $ filter (\x -> length x >= 2) $ group password  
+
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where lines' = Data.List.lines input
+        firstStar = nextValidPassword $ lines'!!0
+        secondStar = nextValidPassword firstStar
 
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
   input <- obtainPuzzleInput "2015" "11"
-  let lines' = Data.List.lines input
-  let firstStar = nextValidPassword $ lines'!!0
-  let secondStar = nextValidPassword firstStar
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
   printPuzzleResults firstStar secondStar
-  

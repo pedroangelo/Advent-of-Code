@@ -1,3 +1,5 @@
+module Event2015.Day14Solution (main, solve) where
+
 import Data.List (transpose)
 import IOHandler
 
@@ -30,15 +32,22 @@ parseReindeer line = (speed, duration, rest)
         duration = read $ strings !! 6
         rest = read $ strings !! 13
 
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where
+        -- get list of reindeer
+        reindeers = map parseReindeer $ lines input
+        -- calculate the reindeer that travelled the most after 2503 seconds
+        firstStar = show $ maximum $ map (calculateDistanceTravelled 2503) reindeers
+        -- calculate which reindeer accumulated more victory points by being first in each second
+        secondStar = show $ maximum $ map (length . filter id) $ transpose $ map (\time -> calculateWinnerTime time reindeers) [1..2503]
+
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
   input <- obtainPuzzleInput "2015" "14"
-  -- get list of reindeer
-  let reindeers = map parseReindeer $ lines input
-  -- calculate the reindeer that travelled the most after 2503 seconds
-  let firstStar = maximum $ map (calculateDistanceTravelled 2503) reindeers
-  -- calculate which reindeer accumulated more victory points by being first in each second
-  let secondStar = maximum $ map (length . filter id) $ transpose $ map (\time -> calculateWinnerTime time reindeers) [1..2503]
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
   printPuzzleResults firstStar secondStar

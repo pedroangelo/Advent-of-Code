@@ -1,3 +1,5 @@
+module Event2015.Day16Solution (main, solve) where
+
 import Data.Maybe (isNothing, fromMaybe)
 import IOHandler
 
@@ -39,18 +41,26 @@ samePossession2 (targetPossession, targetQuantity) possessions
     if targetPossession == "cats" || targetPossession == "trees" then targetQuantity < fromMaybe 1000 quantity else if targetPossession == "pomeranians" || targetPossession == "goldfish" then targetQuantity > fromMaybe 1000 quantity else targetQuantity == fromMaybe 1000 quantity
   where quantity = lookup targetPossession possessions
 
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where
+        -- parse list of compounds per sue
+        auntsSue = map parseSue $ lines input
+        targetSue = (0, [("children",3), ("cats", 7), ("samoyeds", 2), ("pomeranians", 3), ("akitas", 0), ("vizslas", 0), ("goldfish", 5), ("trees",3), ("cars", 2), ("perfumes",1)])
+        -- filter which sues are compatible by comparing their possessions
+        compatibleSue = filter (\sue -> sameSue targetSue sue) auntsSue
+        firstStar = show $ fst $ head compatibleSue
+        
+        -- filter which sues are compatible by comparing their possessions
+        compatibleSue2 = filter (\sue -> sameSue2 targetSue sue) auntsSue
+        secondStar = show $ fst $ head compatibleSue2
+
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
   input <- obtainPuzzleInput "2015" "16"
-  -- parse list of compounds per sue
-  let auntsSue = map parseSue $ lines input
-  let targetSue = (0, [("children",3), ("cats", 7), ("samoyeds", 2), ("pomeranians", 3), ("akitas", 0), ("vizslas", 0), ("goldfish", 5), ("trees",3), ("cars", 2), ("perfumes",1)])
-  -- filter which sues are compatible by comparing their possessions
-  let compatibleSue = filter (\sue -> sameSue targetSue sue) auntsSue
-  let firstStar = fst $ head compatibleSue
-  -- filter which sues are compatible by comparing their possessions
-  let compatibleSue2 = filter (\sue -> sameSue2 targetSue sue) auntsSue
-  let secondStar = fst $ head compatibleSue2
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
   printPuzzleResults firstStar secondStar

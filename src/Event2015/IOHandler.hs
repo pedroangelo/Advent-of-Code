@@ -7,7 +7,7 @@ type Day = String
 type PuzzleInput = String
 
 standardFilePath :: Day -> String
-standardFilePath day = "day" ++ day ++ "_input"
+standardFilePath day = "Day" ++ day ++ "Input"
 
 -- helper function to print presentation message and handle input retrieval
 obtainPuzzleInput :: Year -> Day -> IO PuzzleInput
@@ -20,7 +20,7 @@ obtainPuzzleInput year day = do
   return fileContents
 
 -- helper function to print puzzle results
-printPuzzleResults :: (Show a, Show b) => a -> b -> IO ()
+printPuzzleResults :: String -> String -> IO ()
 printPuzzleResults firstStar secondStar = do
-  putStrLn $ "First star: " ++ show firstStar
-  putStrLn $ "Second star: " ++ show secondStar
+  putStrLn $ "First star: " ++ firstStar
+  putStrLn $ "Second star: " ++ secondStar

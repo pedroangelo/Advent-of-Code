@@ -1,3 +1,5 @@
+module Event2015.Day15Solution (main, solve) where
+
 import Data.List (transpose)
 import IOHandler
 
@@ -52,15 +54,22 @@ filter500Calories ingredients amounts = filter (\amount -> (== 500) $ totalCalor
   where calories = map ((!!4) . snd) ingredients
         totalCalories amount = sum $ zipWith (*) amount calories
 
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where
+        -- parse ingredients
+        ingredients = map parseIngredient $ lines input
+        -- generate distributions of different amounts of ingredients
+        amounts = generateAmounts 100 4
+        firstStar = show $ calculateHighestScore ingredients amounts
+        secondStar = show $ calculateHighestScore ingredients $ filter500Calories ingredients amounts
+
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
   input <- obtainPuzzleInput "2015" "15"
-    -- parse ingredients
-  let ingredients = map parseIngredient $ lines input
-  -- generate distributions of different amounts of ingredients
-  let amounts = generateAmounts 100 4
-  let firstStar = calculateHighestScore ingredients amounts
-  let secondStar = calculateHighestScore ingredients $ filter500Calories ingredients amounts
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
   printPuzzleResults firstStar secondStar

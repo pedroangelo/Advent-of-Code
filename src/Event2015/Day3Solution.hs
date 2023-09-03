@@ -1,3 +1,5 @@
+module Event2015.Day3Solution (main, solve) where
+
 import Data.List
 --import Data.List.Split
 import IOHandler
@@ -24,18 +26,23 @@ getChunks (x:y:ls) = [x,y] : getChunks ls
 splitMoves :: [Move] -> ([Move], [Move])
 splitMoves moves = unzip $ map (\move -> (head move, head $ tail move)) $ getChunks moves
 
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where moves = map textToMoves input
+        santaPath = buildPath moves
+        firstStar = show $ length $ nub santaPath
+  
+        (santaMoves, roboSantaMoves) = splitMoves moves
+        santaPath2 = buildPath santaMoves
+        roboSantaPath2 = buildPath roboSantaMoves
+        secondStar = show $ length $ nub $ santaPath2 ++ roboSantaPath2
 
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
   input <- obtainPuzzleInput "2015" "3"
-  let moves = map textToMoves input
-  let santaPath = buildPath moves
-  let firstStar = length $ nub santaPath
-  
-  let (santaMoves, roboSantaMoves) = splitMoves moves
-  let santaPath2 = buildPath santaMoves
-  let roboSantaPath2 = buildPath roboSantaMoves
-  let secondStar = length $ nub $ santaPath2 ++ roboSantaPath2
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
   printPuzzleResults firstStar secondStar

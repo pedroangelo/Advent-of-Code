@@ -1,3 +1,5 @@
+module Event2015.Day10Solution (main, solve) where
+
 import Data.List
 import IOHandler
 
@@ -7,13 +9,19 @@ lookAndSay :: String -> String
 lookAndSay string = concat $ map (\s -> (show $ length s) ++ [head s]) g
   where g = group string
 
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where lines' = Data.List.lines input
+        iterations = iterate lookAndSay $ lines'!!0
+        firstStar = show $ length $ iterations!!40
+        secondStar = show $ length $ iterations!!50
+
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
   input <- obtainPuzzleInput "2015" "10"
-  let lines' = Data.List.lines input
-  let iterations = iterate lookAndSay $ lines'!!0
-  let firstStar = length $ iterations!!40
-  let secondStar = length $ iterations!!50
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
   printPuzzleResults firstStar secondStar

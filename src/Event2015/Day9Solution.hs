@@ -1,3 +1,5 @@
+module Event2015.Day9Solution (main, solve) where
+
 import Data.List
 import Data.Maybe
 import IOHandler
@@ -62,22 +64,28 @@ distanceLocations location1 location2 locationList distances = (distances !! ind
 distancePath :: LocationList -> Distances -> PathPairs -> Distance
 distancePath locationList distances pathPairs = foldl (\distance path -> distance + uncurry distanceLocations path locationList distances) 0 pathPairs
 
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where inputLines = lines input
+        -- build location list with the list of different locations
+        locationList = foldl parseLocations [] inputLines
+        -- build initial matrix of locations between pairs of locations, populated with 0
+        initialDistances = replicate (length locationList) $ replicate (length locationList) 0
+        -- add values of distances between locations to matrix of locations
+        (_, distances) = foldl parseDistances (locationList, initialDistances) inputLines
+        -- calculate all possible paths as a set of location pairs
+        paths = map (\path -> zip path $ tail path) $ buildPaths locationList
+        -- calculate the distance for each path
+        distancePaths = map (distancePath locationList distances) paths
+        firstStar = show $ minimum distancePaths
+        secondStar = show $ maximum distancePaths
+
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
   input <- obtainPuzzleInput "2015" "9"
-  let inputLines = lines input
-  -- build location list with the list of different locations
-  let locationList = foldl parseLocations [] inputLines
-  -- build initial matrix of locations between pairs of locations, populated with 0
-  let initialDistances = replicate (length locationList) $ replicate (length locationList) 0
-  -- add values of distances between locations to matrix of locations
-  let (_, distances) = foldl parseDistances (locationList, initialDistances) inputLines
-  -- calculate all possible paths as a set of location pairs
-  let paths = map (\path -> zip path $ tail path) $ buildPaths locationList
-  -- calculate the distance for each path
-  let distancePaths = map (distancePath locationList distances) paths
-  let firstStar = minimum distancePaths
-  let secondStar = maximum distancePaths
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
   printPuzzleResults firstStar secondStar

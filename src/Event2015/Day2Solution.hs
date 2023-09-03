@@ -1,3 +1,5 @@
+module Event2015.Day2Solution (main, solve) where
+
 import Data.List
 import Data.Text
 import IOHandler
@@ -39,13 +41,19 @@ volumePresent present = (presentSide present 0)*(presentSide present 1)*(present
 ribbonNeeded :: OrderedPresent -> Int
 ribbonNeeded present = shortestDistance present + volumePresent present
 
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where lines' = Data.List.lines input
+        presents = Data.List.map (presentToList . textToPresent) lines'
+        firstStar = show $ sum $ Data.List.map paperNeeded presents
+        secondStar = show $ sum $ Data.List.map ribbonNeeded presents
+
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
   input <- obtainPuzzleInput "2015" "2"
-  let lines' = Data.List.lines input
-  let presents = Data.List.map (presentToList . textToPresent) lines'
-  let firstStar = sum $ Data.List.map paperNeeded presents
-  let secondStar = sum $ Data.List.map ribbonNeeded presents
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
   printPuzzleResults firstStar secondStar

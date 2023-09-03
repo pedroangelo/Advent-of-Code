@@ -1,3 +1,5 @@
+module Event2015.Day5Solution (main, solve) where
+
 import Data.List
 import IOHandler
 
@@ -25,11 +27,17 @@ hasLetterRepeatsTwiceBetween string = any (True==) $ map (\x -> string!!(x-2) ==
 isNicerString :: String -> Bool
 isNicerString string = getSubstrings string && hasLetterRepeatsTwiceBetween string
 
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where firstStar = show $ length $ filter (True==) $ map isNiceString $ lines input
+        secondStar = show $ length $ filter (True==) $ map isNicerString $ lines input
+
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
   input <- obtainPuzzleInput "2015" "5"
-  let firstStar = length $ filter (True==) $ map isNiceString $ lines input
-  let secondStar = length $ filter (True==) $ map isNicerString $ lines input
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
   printPuzzleResults firstStar secondStar

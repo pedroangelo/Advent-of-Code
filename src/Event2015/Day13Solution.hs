@@ -1,3 +1,5 @@
+module Event2015.Day13Solution (main, solve) where
+
 import Data.Maybe (fromJust)
 import Data.List (elemIndex, permutations, replicate)
 import IOHandler
@@ -56,31 +58,38 @@ relativeHappinessNeighbors person1 person2 people potentialHappiness = happiness
 -- calculate the total happiness along the seating arrangement
 totalHappiness :: People -> PotentialHappiness -> Neighbors -> Happiness
 totalHappiness people potentialHappiness neighbors = foldl (\happiness seatingArrangement -> happiness + uncurry relativeHappinessNeighbors seatingArrangement people potentialHappiness) 0 neighbors
+
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where inputLines = lines input
+        -- build list of different people
+        people = foldl parsePerson [] inputLines
+        -- build initial matrix of potential happiness between pairs of people, populated with 0
+        initialPotentialHappiness = replicate (length people) $ replicate (length people) 0
+        -- add happiness between people to matrix of potential happiness
+        (_, potentialHappiness) = foldl parsePotentialHappiness (people, initialPotentialHappiness) inputLines
+        -- calculate all possible seating arrangements as a set of neighbors
+        neighborsCombinations = buildNeighborsCombinations people
+        -- calculate the total happiness for each seating arrangement
+        totalHappinessCombinations = map (totalHappiness people potentialHappiness) neighborsCombinations
+        firstStar = show $ maximum totalHappinessCombinations
         
+        -- build list of people with me
+        peopleMe = people ++ ["Me"]
+        -- build matrix of potential happiness with me
+        potentialHappinessMe = map (\potentialHappinessByPerson -> potentialHappinessByPerson ++ [0]) potentialHappiness ++ [replicate (length peopleMe) 0]
+        -- calculate all possible seating arrangements with me
+        neighborsCombinationsMe = buildNeighborsCombinations peopleMe
+        -- calculate the total happiness for each seating arrangement with me
+        totalHappinessCombinationsMe = map (totalHappiness peopleMe potentialHappinessMe) neighborsCombinationsMe
+        secondStar = show $ maximum totalHappinessCombinationsMe
+
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
   input <- obtainPuzzleInput "2015" "13"
-  let inputLines = lines input
-  -- build list of different people
-  let people = foldl parsePerson [] inputLines
-  -- build initial matrix of potential happiness between pairs of people, populated with 0
-  let initialPotentialHappiness = replicate (length people) $ replicate (length people) 0
-  -- add happiness between people to matrix of potential happiness
-  let (_, potentialHappiness) = foldl parsePotentialHappiness (people, initialPotentialHappiness) inputLines
-  -- calculate all possible seating arrangements as a set of neighbors
-  let neighborsCombinations = buildNeighborsCombinations people
-  -- calculate the total happiness for each seating arrangement
-  let totalHappinessCombinations = map (totalHappiness people potentialHappiness) neighborsCombinations
-  let firstStar = maximum totalHappinessCombinations
-  -- build list of people with me
-  let peopleMe = people ++ ["Me"]
-  -- build matrix of potential happiness with me
-  let potentialHappinessMe = map (\potentialHappinessByPerson -> potentialHappinessByPerson ++ [0]) potentialHappiness ++ [replicate (length peopleMe) 0]
-  -- calculate all possible seating arrangements with me
-  let neighborsCombinationsMe = buildNeighborsCombinations peopleMe
-  -- calculate the total happiness for each seating arrangement with me
-  let totalHappinessCombinationsMe = map (totalHappiness peopleMe potentialHappinessMe) neighborsCombinationsMe
-  let secondStar = maximum totalHappinessCombinationsMe
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
   printPuzzleResults firstStar secondStar

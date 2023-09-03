@@ -1,3 +1,5 @@
+module Event2015.Day19Solution (main, solve) where
+
 import Data.Char (isUpper, isLower)
 import Data.List (elemIndices, nub, splitAt)
 import IOHandler
@@ -179,35 +181,42 @@ reachableAtoms rules atom = let
 -- MAIN
 
 -- build molecule and replacements from input
-obtainData :: IO (Molecule, [Replacement])
-obtainData = do
-    -- GATHER INPUT
-    -- print puzzle info and get input from user
-    input <- obtainPuzzleInput "2015" "19"
-    --let fileContents = "e => H\ne => O\nH => HO\nH => OH\nO => HH\n\nHOHOHO"
-    let inputLines = lines input
-    let replacementsInput = init $ init inputLines
-    let moleculeInput = last inputLines
+obtainData :: String -> (Molecule, [Replacement])
+obtainData input = (molecule, rules)
+  where -- GATHER INPUT
+        --let fileContents = "e => H\ne => O\nH => HO\nH => OH\nO => HH\n\nHOHOHO"
+        inputLines = lines input
+        replacementsInput = init $ init inputLines
+        moleculeInput = last inputLines
 
-    -- PARSE INPUT
-    -- parse replacements rules (from replacement rules in input)
-    let rules = map parseReplacements replacementsInput
-    -- parse molecule (from input) into a list of the individual molecules
-    let molecule = parseMolecule moleculeInput
-    return (molecule, rules)
+        -- PARSE INPUT
+        -- parse replacements rules (from replacement rules in input)
+        rules = map parseReplacements replacementsInput
+        -- parse molecule (from input) into a list of the individual molecules
+        molecule = parseMolecule moleculeInput
+
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where
+        -- OBTAIN DATA
+        (molecule, rules) = obtainData input
+
+        -- FIRST STAR - How many distinct molecules can be created after all the different ways you can do one replacement on the molecule?
+        -- generate new molecules via substitution
+        newMolecules = nub $ concat $ map (\r -> replaceMolecule r molecule) rules
+        firstStar = show $ length newMolecules
+
+        -- SECOND STAR - How many replacements steps to reach the molecule?
+        --let secondStar = fullReverse replacements [molecule]
+        -- secondStar <- getSecondStar rules [molecule] 0
+        secondStar = "work in progress"
 
 main :: IO ()
 main = do
-  -- OBTAIN DATA
-  (molecule, rules) <- obtainData
-
-  -- FIRST STAR - How many distinct molecules can be created after all the different ways you can do one replacement on the molecule?
-  -- generate new molecules via substitution
-  let newMolecules = nub $ concat $ map (\r -> replaceMolecule r molecule) rules
-  let firstStar = length newMolecules
-
-  -- SECOND STAR - How many replacements steps to reach the molecule?
-  --let secondStar = fullReverse replacements [molecule]
-  -- secondStar <- getSecondStar rules [molecule] 0
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput "2015" "19"
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
-  printPuzzleResults firstStar "work in progress"
+  printPuzzleResults firstStar secondStar

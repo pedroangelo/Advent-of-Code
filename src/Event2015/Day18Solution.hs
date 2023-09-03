@@ -1,3 +1,5 @@
+module Event2015.Day18Solution (main, solve) where
+
 import IOHandler
 
 data Mode = FirstStar | SecondStar deriving Eq
@@ -64,17 +66,24 @@ evolveGrid mode grid = map (map (evolveLight mode grid)) positions
         widthGrid = length $ head grid
         positions = [[(x, y) | x <- [0..widthGrid-1]] | y <- [0..heightGrid-1]]
 
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where
+        -- let ingredients = map parseIngredient $ lines fileContents
+        grid = map parseLine $ lines input
+        -- calculate how many lights are on after 100 iterations
+        firstStar = show $ calculateOnLights $ iterate (evolveGrid FirstStar) grid !! 100
+        -- fix lights in the corner as on
+        grid' = (True : (init $ tail $ head grid) ++ [True]) : (init $ tail $ grid) ++ [(True : (init $ tail $ last grid) ++ [True])]
+        -- recalculate, with the corner light stuck in on
+        secondStar = show $ calculateOnLights $ iterate (evolveGrid SecondStar) grid' !! 100
+
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
   input <- obtainPuzzleInput "2015" "18"
-  --let ingredients = map parseIngredient $ lines fileContents
-  let grid = map parseLine $ lines input
-  -- calculate how many lights are on after 100 iterations
-  let firstStar = calculateOnLights $ iterate (evolveGrid FirstStar) grid !! 100
-  -- fix lights in the corner as on
-  let grid' = (True : (init $ tail $ head grid) ++ [True]) : (init $ tail $ grid) ++ [(True : (init $ tail $ last grid) ++ [True])]
-  -- recalculate, with the corner light stuck in on
-  let secondStar = calculateOnLights $ iterate (evolveGrid SecondStar) grid' !! 100
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
   printPuzzleResults firstStar secondStar

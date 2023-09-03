@@ -1,3 +1,5 @@
+module Event2015.Day8Solution (main, solve) where
+
 import IOHandler
 
 countString :: String -> Int
@@ -16,12 +18,18 @@ countString' ('\\' : '\"' : string) = 4 + countString' string
 countString' ('\\' : 'x' : c1 : c2 : string) = 5 + countString' string
 countString' (c : string) = 1 + countString' string
 
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where strings = lines $ input
+        firstStar = show $ sum $ map (\x -> (length x) - (countString x)) strings
+        secondStar = show $ sum $ map (\x -> (countString' x) - (length x)) strings
+
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
   input <- obtainPuzzleInput "2015" "8"
-  let strings = lines $ input
-  let firstStar = sum $ map (\x -> (length x) - (countString x)) strings
-  let secondStar = sum $ map (\x -> (countString' x) - (length x)) strings
+  let (firstStar, secondStar) = solve input
   -- print puzzle results
   printPuzzleResults firstStar secondStar
