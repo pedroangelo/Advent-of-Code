@@ -115,6 +115,15 @@ buildCircuit circuit signalMap = buildCircuit notReadyInstructions newSignalMap
         notReadyInstructions = filter (\x -> not $ instructionHasSignal x signalMap) circuit
         newSignalMap = processReadyInstructions readyInstructions signalMap
 
+filterInstructionTo :: Wire -> Instruction -> Bool
+filterInstructionTo wire1 (Link input wire2) = wire1 == wire2
+filterInstructionTo wire1 (And input1 input2 wire2) = wire1 == wire2
+filterInstructionTo wire1 (Or input1 input2 wire2) = wire1 == wire2
+filterInstructionTo wire1 (Not input wire2) = wire1 == wire2
+filterInstructionTo wire1 (LShift input shift wire2) = wire1 == wire2
+filterInstructionTo wire1 (RShift input shift wire2) = wire1 == wire2
+
+
 main :: IO ()
 main = do
   -- print puzzle info and get input from user
@@ -123,6 +132,9 @@ main = do
   let signalMap = replicate (wireToIndex "zz") $ -1
   let finishedSignalMap = buildCircuit circuit signalMap
   let firstStar = finishedSignalMap !! (wireToIndex "a")
-  let secondStar = "unfinished"
+
+  let circuit2 = [Link (Signal firstStar) "b"] ++ filter (not . filterInstructionTo "b") circuit
+  let finishedSignalMap2 = buildCircuit circuit2 signalMap
+  let secondStar = finishedSignalMap2 !! (wireToIndex "a")
   -- print puzzle results
   printPuzzleResults firstStar secondStar
