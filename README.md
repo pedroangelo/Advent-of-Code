@@ -3,7 +3,7 @@ My advent of code solutions for every event
 
 ## todo
 - improve day 3, use chunks function from split package
-- improve day 6, remove wordsWhen function, use splitOn from split package, integrate second star solution
+- improve day 6, remove wordsWhen function, use splitOn from split package
 - finish day 12
 - finish day 17
 - finish day 19, solve second star
