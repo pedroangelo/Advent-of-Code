@@ -1,4 +1,4 @@
-module Event2015.Day6SolutionGeneric (main, solve) where
+module Event2015.Day6Solution (main, solve) where
 
 -- import Data.List.Split (splitOn)
 import IOHandler
@@ -12,33 +12,28 @@ wordsWhen p s =  case dropWhile p s of
                       s' -> w : wordsWhen p s''
                             where (w, s'') = break p s'
 
+class Actionable a where
+  turnOn :: Action a
+  turnOff :: Action a
+  toggle :: Action a
+
+instance Actionable Bool where
+  turnOn _ = True
+  turnOff _ = False
+  toggle = not
+
+instance Actionable Int where
+  turnOn = (+1)
+  turnOff 0 = 0
+  turnOff n = n - 1
+  toggle = (+2)
+
 type Line a = [Light a]
 type Grid a = [Line a]
 type Light a = a
 type Position = (Int, Int)
 type Action a = Light a -> Light a
 type Instruction a = (Action a, Position, Position)
-
-data ActionSet a = ActionSet { turnOn :: Action a, turnOff :: Action a, toggle :: Action a }
-
-turnOnF :: Action Bool
-turnOnF _ = True
-
-turnOffF :: Action Bool
-turnOffF _ = False
-
-toggleF :: Action Bool
-toggleF = not
-
-turnOnS :: Action Int
-turnOnS = (+1)
-
-turnOffS :: Action Int
-turnOffS 0 = 0
-turnOffS n = n - 1
-
-toggleS :: Action Int
-toggleS = (+2)
 
 changeGrid :: Grid a -> Instruction a -> Grid a
 changeGrid grid (action, posTopLeft, posBottomRight) =
@@ -55,11 +50,11 @@ changeGrid grid (action, posTopLeft, posBottomRight) =
         -- altered lines of grid according to instruction
         alteredGrid = map (\line -> take x1 line ++ map action (slice x1 x2 line) ++ drop (x2+1) line) remainingGrid
 
-parseInstruction :: ActionSet a -> String -> Instruction a
-parseInstruction actionSet string
-  | head instruction == "toggle" = (toggle actionSet, posTopLeft, posBottomRight)
-  | instruction!! 1 == "on" = (turnOn actionSet, posTopLeft, posBottomRight)
-  | instruction!! 1 == "off" = (turnOff actionSet, posTopLeft, posBottomRight)
+parseInstruction :: Actionable a => String -> Instruction a
+parseInstruction string
+  | head instruction == "toggle" = (toggle, posTopLeft, posBottomRight)
+  | instruction!! 1 == "on" = (turnOn, posTopLeft, posBottomRight)
+  | instruction!! 1 == "off" = (turnOff, posTopLeft, posBottomRight)
   where instruction = words string
         mod' = if head instruction == "toggle" then 0 else 1
         posTopLeft = (\x -> (read $ head x, read $ x!!1)) $ wordsWhen (==',') $ instruction !!(1+mod')
@@ -72,13 +67,11 @@ buildGrid elem = replicate 1000 $ replicate 1000 elem
 
 solve :: String -> (String, String)
 solve input = (firstStar, secondStar)
-  where actionSetF = ActionSet turnOnF turnOffF toggleF
-        instructionsF = map (parseInstruction actionSetF) $ lines input
+  where instructionsF = map (parseInstruction :: String -> Instruction Bool) $ lines input
         gridF = foldl changeGrid (buildGrid False) instructionsF
         firstStar = show $ sum $ map (length . filter (True ==)) gridF
 
-        actionSetS = ActionSet turnOnS turnOffS toggleS
-        instructionsS = map (parseInstruction actionSetS) $ lines input
+        instructionsS = map (parseInstruction :: String -> Instruction Int) $ lines input
         gridS = foldl changeGrid (buildGrid 0) instructionsS
         secondStar = show $ sum $ map sum gridS
 
