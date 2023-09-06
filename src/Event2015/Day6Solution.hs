@@ -3,15 +3,6 @@ module Event2015.Day6Solution (main, solve) where
 -- import Data.List.Split (splitOn)
 import IOHandler
 
-slice :: Int -> Int -> [a] -> [a]
-slice start end = take (end-start+1) . drop start
-
-wordsWhen :: (Char -> Bool) -> String -> [String]
-wordsWhen p s =  case dropWhile p s of
-                      "" -> []
-                      s' -> w : wordsWhen p s''
-                            where (w, s'') = break p s'
-
 class Actionable a where
   turnOn :: Action a
   turnOff :: Action a
@@ -28,12 +19,29 @@ instance Actionable Int where
   turnOff n = n - 1
   toggle = (+2)
 
+instance Actionable Float where
+  turnOn 1 = 1
+  turnOn n = n + 0.1
+  turnOff 0 = 0
+  turnOff n = n - 0.1
+  toggle 0 = 1
+  toggle _ = 0
+
 type Line a = [Light a]
 type Grid a = [Line a]
 type Light a = a
 type Position = (Int, Int)
 type Action a = Light a -> Light a
 type Instruction a = (Action a, Position, Position)
+
+slice :: Int -> Int -> [a] -> [a]
+slice start end = take (end-start+1) . drop start
+
+wordsWhen :: (Char -> Bool) -> String -> [String]
+wordsWhen p s =  case dropWhile p s of
+                      "" -> []
+                      s' -> w : wordsWhen p s''
+                            where (w, s'') = break p s'
 
 changeGrid :: Grid a -> Instruction a -> Grid a
 changeGrid grid (action, posTopLeft, posBottomRight) =
@@ -74,6 +82,10 @@ solve input = (firstStar, secondStar)
         instructionsS = map (parseInstruction :: String -> Instruction Int) $ lines input
         gridS = foldl changeGrid (buildGrid 0) instructionsS
         secondStar = show $ sum $ map sum gridS
+
+        instructionsT = map (parseInstruction :: String -> Instruction Float) $ lines input
+        gridT = foldl changeGrid (buildGrid 0.0) instructionsT
+        extraStar = show $ (/1000000) $ sum $ map sum gridT
 
 main :: IO ()
 main = do
