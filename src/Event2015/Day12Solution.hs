@@ -1,5 +1,8 @@
+module Event2015.Day12Solution (main, solve) where
+
+import Data.Char (isDigit, isNumber)
 import Data.List (span)
-import Data.Char (isNumber)
+import IOHandler
 
 data Json
   = String String
@@ -7,6 +10,17 @@ data Json
   | Array [Json]
   | Object [(String, Json)]
   deriving (Show, Eq)
+
+-- read all numbers from a string
+-- function only used by easy solution for first star
+retrieveNumbers :: String -> [String]
+retrieveNumbers [] = []
+retrieveNumbers string = number : retrieveNumbers restOfString
+  where
+        -- ignore text until a number is found, return text starting with the number
+        (_, leadingWithNumber) = span (\x -> not $ (isDigit x) || (x == '-')) string
+        -- extract both the number from the string, as well as the rest of the text
+        (number, restOfString) = span (\x -> (isDigit x) || (x == '-')) leadingWithNumber
 
 -- parse a string
 parseString :: String -> (String, String)
@@ -90,7 +104,6 @@ removeRed (Object object)
     let object' = map (\x -> (fst x, head $ snd x)) $ filter (\x -> (length $ snd x) /= 0) $ map (\x -> (fst x, removeRed $ snd x)) object
     in [Object object']
   
-
 -- check if an object has a red value
 hasRed :: Json -> Bool
 hasRed (String string) = string == "red"
@@ -98,11 +111,26 @@ hasRed (Number _) = False
 hasRed (Array array) = False
 hasRed (Object object) = or $ map ((== String "red") . snd) object
 
+
+-- MAIN FUNCTIONS
+
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where -- simple solution for first star,
+        -- retrieve all numbers in input, read them as int and add them all together
+        firstStarSimple = show $ sum $ map (\x -> read x :: Int) $ init $ retrieveNumbers input
+
+        -- general solution, for both first and second star
+        json = fst $ parseJson input
+        -- sum all numbers
+        firstStar = show $ countJson json
+        -- sum all numbers not on objects with the "red" property
+        secondStar = show $ countJson $ head $ removeRed json
+
 main :: IO ()
 main = do
-  putStr "Filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
-  let json = fst $ parseJson fileContents
-  putStrLn $ "First Star: " ++ (show $ countJson json)
-  putStrLn $ "Second Star: " ++ (show $ countJson $ head $ removeRed json)
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput "2015" "12"
+  let (firstStar, secondStar) = solve input
+  -- print puzzle results
+  printPuzzleResults firstStar secondStar
