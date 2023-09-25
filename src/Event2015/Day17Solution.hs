@@ -1,3 +1,6 @@
+module Event2015.Day17Solution (main, solve) where
+
+import IOHandler
 import Data.Sort (sortBy)
   
 type Container = Int
@@ -23,17 +26,19 @@ generateCombinations liters chosenContainers (container:remainingContainers) = c
     combinationTail = generateCombinations liters chosenContainers remainingContainers
     newCombination = chosenContainers ++ [container]
 
+solve :: String -> (String, String)
+solve input = (firstStar, secondStar)
+  where containers = sortBy (flip compare) (map (\x -> read x :: Container) $ lines input)
+        combinations = generateCombinations 150 [] containers
+        firstStar = show $ length combinations
+        
+        least = minimum $ map length combinations
+        secondStar = show (length $ filter (\c -> length c == least) combinations)
+
 main :: IO ()
 main = do
-  putStr "Filepath: "
-  filePath <- getLine
-  fileContents <- readFile filePath
-  -- parse list of compounds per sue
-  let containers = sortBy (flip compare) (map (\x -> read x :: Container) $ lines fileContents)
-  -- different combinations that hold exactly 150 liters
-  let combinations = generateCombinations 150 [] containers
-  putStrLn $ "First star: " ++ show (length combinations)
-  -- least amount of containers to for a combination that holds exactly 150 liters
-  let least = minimum $ map length combinations
-  -- different combinations using the minimum number of containers
-  putStrLn $ "Second star: " ++ show (length $ filter (\c -> length c == least) combinations)
+  -- print puzzle info and get input from user
+  input <- obtainPuzzleInput "2015" "17"
+  let (firstStar, secondStar) = solve input
+  -- print puzzle results
+  printPuzzleResults firstStar secondStar
